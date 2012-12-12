@@ -192,7 +192,7 @@ class ntp(
     group   => $config_file_group,
     mode    => $config_file_mode,
     content => template('ntp/ntp.conf.erb'),
-    require => $package ? { undef   => undef, default => Package[$package], }
+    require => $package ? { undef => undef, default => Package[$package], },
     notify  => Service[$service_name],
   }
 
@@ -203,7 +203,7 @@ class ntp(
       group   => 'root',
       mode    => '0644',
       content => template("${module_name}/${ntp::params::defaults_file_tpl}"),
-      require => $package ? { undef   => undef, default => Package[$package], }
+      require => $package ? { undef => undef, default => Package[$package], },
       notify  => Service[$service_name],
     }
   }
