@@ -180,8 +180,10 @@ class ntp(
     }
   }
 
-  package { $package:
-    ensure => $package_ensure,
+  if $package {
+    package { $package:
+      ensure => $package_ensure,
+    }
   }
 
   file { $config_file:
@@ -190,7 +192,7 @@ class ntp(
     group   => $config_file_group,
     mode    => $config_file_mode,
     content => template('ntp/ntp.conf.erb'),
-    require => Package[$package],
+    require => $package ? { undef   => undef, default => Package[$package], }
     notify  => Service[$service_name],
   }
 
@@ -201,7 +203,7 @@ class ntp(
       group   => 'root',
       mode    => '0644',
       content => template("${module_name}/${ntp::params::defaults_file_tpl}"),
-      require => Package[$package],
+      require => $package ? { undef   => undef, default => Package[$package], }
       notify  => Service[$service_name],
     }
   }
